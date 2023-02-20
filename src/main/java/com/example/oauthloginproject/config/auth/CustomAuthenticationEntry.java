@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class CustomAuthenticationEntry implements AuthenticationEntryPoint {
+public class CustomAuthenticationEntry implements AuthenticationEntryPoint { //인증예외처리
 
     @Override
     public void commence(

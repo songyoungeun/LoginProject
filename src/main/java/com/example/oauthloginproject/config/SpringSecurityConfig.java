@@ -64,8 +64,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .httpBasic().disable()
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .csrf().disable() // 사이트 간 요청 위조
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt 같은 토큰 방식 쓸때 사용하는 설정
                 .and()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() //Preflight 요청은 허용
@@ -76,12 +76,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .cors()
                 .and()
-                .exceptionHandling().accessDeniedHandler(new CustomAccessDenied())
+                .exceptionHandling().accessDeniedHandler(new CustomAccessDenied())// 인가실패시 처리
                 .and()
-                .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntry())
+                .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntry())// 인증실패시 처리
                 .and()
                 .addFilterBefore(new CustomFilter(jwtAuthProvider), UsernamePasswordAuthenticationFilter.class);
-                // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
+                //  UsernamePasswordAuthenticationFilter 직전에 CustomFilter가 걸리도록
                 //UsernamePasswordAuthenticationFilter : 아이디와 비밀번호를 사용하는 form 기반 인증
                 //설정된 로그인 url로 오는 요청 감시, 유저 인증 처리
     }

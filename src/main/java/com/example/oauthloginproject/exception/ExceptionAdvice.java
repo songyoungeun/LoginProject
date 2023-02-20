@@ -28,12 +28,12 @@ import java.util.HashMap;
 import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
-@RestControllerAdvice
-public class ExceptionAdvice {
+@RestControllerAdvice // @ControllerAdvice와 @ResponseBody을 가지고 있다. @Controller처럼 작동하며 @ResponseBody를 통해 객체를 리턴할 수 있다.
+public class ExceptionAdvice { // @ExceptionHandler : Controller계층에서 발생하는 에러를 잡아서 메서드로 처리해주는 기능
 
     @ExceptionHandler({Exception.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<String> defaultException(Exception e) throws Exception {
+    protected ResponseEntity<String> defaultException(Exception e) throws Exception {
         e.printStackTrace();
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -49,7 +49,7 @@ public class ExceptionAdvice {
             MissingServletRequestParameterException.class,
             UnsatisfiedServletRequestParameterException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> badRequestException(Exception e) throws Exception {
+    protected ResponseEntity<String> badRequestException(Exception e) throws Exception {
         e.printStackTrace();
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -57,12 +57,14 @@ public class ExceptionAdvice {
 
         JSONArray result = JSONArray.fromObject(resultMap);
 
+        // error message 중에 " default message [이메일은 필수 입력 값 입니다.] " 해당 부분만 뽑아내고 싶다!
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.get(0).toString());
     }
 
     @ExceptionHandler({AuthenticationEntryPointException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<String> accessDeniedException(Exception e) throws Exception {
+    protected ResponseEntity<String> accessDeniedException(Exception e) throws Exception {
         e.printStackTrace();
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -75,7 +77,7 @@ public class ExceptionAdvice {
 
     @ExceptionHandler({ForbiddenException.class, AccessDeniedException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseEntity<String> forbiddenException(ForbiddenException e) throws Exception {
+    protected ResponseEntity<String> forbiddenException(ForbiddenException e) throws Exception {
         e.printStackTrace();
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -91,7 +93,7 @@ public class ExceptionAdvice {
             EntityNotFoundException.class
     })
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> notFoundException(Exception e) throws Exception { //NotFoundException e 로 했을땐 Could not resolve parameter [0] in public 이런 오류났음
+    protected ResponseEntity<String> notFoundException(Exception e) throws Exception { //NotFoundException e 로 했을땐 Could not resolve parameter [0] in public 이런 오류났음
 
         e.printStackTrace();
 
@@ -99,6 +101,7 @@ public class ExceptionAdvice {
         resultMap.put("msg", e.getMessage());
 
         JSONArray result = JSONArray.fromObject(resultMap);
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result.get(0).toString());
     }
 //    @ExceptionHandler(UserNotFoundException.class)
@@ -114,10 +117,10 @@ public class ExceptionAdvice {
 //    }
     @ExceptionHandler(DuplicatedException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<String> DuplicatedException(DuplicatedException e) throws Exception {
+    protected ResponseEntity<String> DuplicatedException(DuplicatedException e) throws Exception {
         e.printStackTrace();
 
-        Map<String, Object> resultMap = new HashMap<String, Object>();
+        Map<String, Object> resultMap = new HashMap<String, Object>(); //Map에 Value 값으로 한가지로 정해지지 않고 여러 형태의 Collection을 넣고 싶다면?Value를  Collection의 최상위 클래스인 Object로 지정
         resultMap.put("msg", e.getMessage());
 
         JSONArray result = JSONArray.fromObject(resultMap);
@@ -125,7 +128,7 @@ public class ExceptionAdvice {
     }
 
     @ExceptionHandler(ApiOtherException.class)
-    public ResponseEntity<String> ApiOtherException(ApiOtherException e) throws Exception {
+    protected ResponseEntity<String> ApiOtherException(ApiOtherException e) throws Exception {
         e.printStackTrace();
 
         Map<String, Object> resultMap = new HashMap<String, Object>();

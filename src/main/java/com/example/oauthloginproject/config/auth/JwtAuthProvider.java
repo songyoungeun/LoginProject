@@ -1,6 +1,5 @@
 package com.example.oauthloginproject.config.auth;
 
-import com.example.oauthloginproject.dto.TokenDto;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,11 +7,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
+
 @RequiredArgsConstructor
 @Component
 public class JwtAuthProvider {
@@ -21,7 +20,7 @@ public class JwtAuthProvider {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String ACCESS_USER_ID = "id";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L; //30분 //1000L * 60 * 60 * 12; //-> 12시간 , 60000 1분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24; //하루
+//    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24; //하루
     @Value("${spring.jwt.secret.signature}")
     private String signatureKey;
 //    private String signatureKey =  "TOYPROJECTSONGYOUNGEUNLOGINSERVICE";

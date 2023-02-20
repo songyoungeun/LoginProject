@@ -47,22 +47,6 @@ public class LoginController {
         // 500번대 서버에러
         // service : 예) 고객으 정보 가져오거나
         //dto -> entity
-//        Member loginEntity = loginDto.toEntity();
-//        Member member = memberRepository.findByEmail(loginEntity.getEmail()).orElse(null);
-//        // 회원 엔티티 객체 생성 및 조회시작
-//
-//        if(member == null) {
-//            throw new UserNotFoundException("메일을 다시 확인해주세요.");
-//        }
-//
-//        if(!passwordEncoder.matches(loginEntity.getPassword(), member.getPassword()))
-//            throw new ForbiddenException("비밀번호를 다시 확인해주세요.");
-//
-//        // service return 값을 accessToken값으로 하면 될듯!!
-////        AuthenticationDto authentication = loginService.loginMember(loginDto);
-//
-////        String accessToken = authProvider.createAccessToken(authentication.getId(), authentication.getEmail(), "USER");
-//        AuthenticationDto authentication = modelMapper.map(member, AuthenticationDto.class);
 
         String accessToken = loginService.loginMember(loginDto);
         //쿠키에 token 실어서 보내기
@@ -80,12 +64,6 @@ public class LoginController {
     @GetMapping("/logout")
     public ResponseEntity<String> logout(HttpServletResponse response, HttpServletRequest request) { // 로그아웃 api
 
-//        Cookie cookie = WebUtils.getCookie(request, "accessToken");
-//        if(cookie != null) {
-//            log.info("cookie : ", cookie);
-//            cookie.setMaxAge(0);
-//            response.addCookie(cookie);
-//        }
         //원래 쿠키의 이름이 userInfo 이었다면, value를 null로 처리.
         Cookie cookie = new Cookie("Authorization", null);
         cookie.setMaxAge(0); // 쿠키의 expiration 타임을 0으로 하여 없앤다.

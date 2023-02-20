@@ -26,6 +26,7 @@ public class CustomFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
+        // api 호출 전 로직
         HttpServletRequest httpReq = (HttpServletRequest)request;
         HttpServletResponse httpRes = (HttpServletResponse) response;
 
@@ -33,9 +34,9 @@ public class CustomFilter extends GenericFilterBean {
             if("OPTIONS".equalsIgnoreCase(httpReq.getMethod())) { //option 요청일때 필터검증 안함
                 httpRes.setStatus(HttpServletResponse.SC_OK);
             } else {
-                // 진자 요청일때 필터 검증
+                // 진짜 요청일때 필터 검증
                 String token = jwtTokenProvider.resolveToken(httpReq); // 헤더에서 JWT 를 받아옵니다.
-                if (token != null) { // 유효한 토큰인지 확인합니다.
+                if (token != null) { // 유효한 토큰인지 확인
                     if(jwtTokenProvider.validateToken(token)) {
 
                         /** 사용자 인증토큰 검사 */

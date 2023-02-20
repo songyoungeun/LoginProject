@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-public class CustomAccessDenied implements AccessDeniedHandler {
+public class CustomAccessDenied implements AccessDeniedHandler { //인가예외처리
 
     @Override
     public void handle(
